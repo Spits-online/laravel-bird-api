@@ -96,7 +96,7 @@ class Contact
     /**
      * Get the contact as an array or object
      */
-    public function toArray(): array | object
+    public function toArray(): array|object
     {
         return [
             'displayName' => $this->displayName,

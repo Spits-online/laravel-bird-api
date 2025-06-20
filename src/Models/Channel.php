@@ -2,7 +2,4 @@
 
 namespace Spits\Bird\Models;
 
-class Channel
-{
-
-}
+class Channel {}

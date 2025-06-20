@@ -3,27 +3,28 @@
 namespace Spits\Bird\Messages;
 
 use Spits\Bird\Enums\ChannelType;
+use Spits\Bird\Models\Template;
 
 class WhatsappMessage extends Message
 {
     public ChannelType $viaChannel = ChannelType::WHATSAPP;
 
-    public function __construct(protected string $templateProjectId, protected string $templateVersion, protected string $templateLocale,protected string $receiver, protected array $templateVariables = [])
-    {
-
-    }
+    public function __construct(
+        protected Template $template,
+        protected string $receiver
+    ) {}
 
     #[\Override]
     public function toArray(): array
     {
-        $message['receiver']['contacts'] =[
-            ['identifierValue'=>$this->receiver]
-        ] ;
+        $message['receiver']['contacts'] = [
+            ['identifierValue' => $this->receiver],
+        ];
+
         $message['template'] = [
-            'projectId' => $this->templateProjectId,
-            'version' => $this->templateVersion,
-            'locale' => $this->templateLocale,
-            'variables' => $this->templateVariables,
+            'projectId' => $this->template->getProjectId(),
+            'version'   => $this->template->getVersion(),
+            'variables' => $this->template->getParameters(),
         ];
 
         return $message;

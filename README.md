@@ -207,9 +207,7 @@ You need to configure an SMS channel before you can send SMS notifications.
 Define a custom notification class implementing the `toSMS` method.
 
 ```php
-use Illuminate\Notifications\Notification;
-use Spits\Bird\Messages\SMSMessage;
-use Spits\Bird\Notifications\Channels\SMSChannel;
+use Illuminate\Notifications\Notification;use Spits\Bird\Channels\SMSChannel;use Spits\Bird\Messages\SMSMessage;
 
 class OrderNotification extends Notification
 {
@@ -258,14 +256,13 @@ Recommended way  is to place the keys in your .env
 ### usage
 To send a message through WhatsApp create you own Notification class.\
 That should then use our `WhatsappMessage` class. Example below
+
 ```php
 <?php
 
 namespace App\Notifications;
 
-use Illuminate\Notifications\Notification;
-use Spits\Bird\Models\Messages\WhatsappMessage;
-use Spits\Bird\Notifications\Channels\WhatsappChannel;
+use Illuminate\Notifications\Notification;use Spits\Bird\Channels\WhatsappChannel;use Spits\Bird\Models\Messages\WhatsappMessage;
 
 class WhatsappNotification extends Notification
 {

@@ -4,7 +4,6 @@ namespace Spits\Bird\Exceptions;
 
 use Exception;
 use Illuminate\Support\Facades\Log;
-use Spits\_src\Services\Notifications\SMS\SMSMessage;
 
 class NotificationNotSent extends Exception
 {

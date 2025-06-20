@@ -1,17 +1,16 @@
 <?php
 
-namespace Spits\Bird\Notifications\Channels;
+namespace Spits\Bird\Channels;
 
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Http;
 use Spits\Bird\Concerns\IsNotificationChannel;
 use Spits\Bird\Contracts\BirdConnection;
 use Spits\Bird\Exceptions\InvalidParameterException;
 use Spits\Bird\Exceptions\NotificationNotSent;
-use Spits\Bird\Messages\SMSMessage;
+use Spits\Bird\Messages\WhatsappMessage;
 
-class SMSChannel implements IsNotificationChannel
+class WhatsappChannel implements IsNotificationChannel
 {
     use BirdConnection;
 
@@ -20,10 +19,10 @@ class SMSChannel implements IsNotificationChannel
      */
     public function channelEndpoint(): string
     {
-        $channelID = config('bird.channels.sms');
+        $channelID = config('bird.channels.whatsapp');
 
         if (! $channelID) {
-            throw InvalidParameterException::configValueIsNotSet('bird.channels.sms');
+            throw InvalidParameterException::configValueIsNotSet('bird.channels.whatsapp');
         }
 
         return $this->endpoint("channels/$channelID/messages");
@@ -31,23 +30,23 @@ class SMSChannel implements IsNotificationChannel
 
     public function getMessage(mixed $notifiable, Notification $notification): mixed
     {
-        if (! method_exists($notification, 'toSMS')) {
-            throw new \InvalidArgumentException('Notification does not implement toSMS method');
+        if (! method_exists($notification, 'toWhatsapp')) {
+            throw new \InvalidArgumentException('Notification does not implement toWhatsapp method');
         }
 
-        return $notification->toSMS($notifiable, $notification);
+        return $notification->toWhatsapp($notifiable, $notification);
     }
 
     /**
      * Send the notification
      *
-     * @throws ConnectionException
-     * @throws NotificationNotSent
      * @throws InvalidParameterException
+     * @throws NotificationNotSent
+     * @throws ConnectionException
      */
     public function send(mixed $notifiable, Notification $notification): void
     {
-        /** @var SMSMessage $message */
+        /** @var WhatsappMessage $message */
         $message = $this->getMessage($notifiable, $notification);
 
         $response = $this->birdRequest($this->channelEndpoint(), $message->toArray());

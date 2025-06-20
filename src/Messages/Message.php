@@ -13,9 +13,13 @@ abstract class Message
     use HasBirdMessage;
 
     public ChannelType $viaChannel;
+
     public MessageType $messageType;
+
     public array $contacts = [];
+
     public array $actions = [];
+
     public string $text;
 
     public function text(string $text): static
@@ -28,7 +32,7 @@ abstract class Message
     public function addContact(Contact $contact, IdentifierKey $identifierKey): static
     {
         $this->contacts[] = [
-            'identifierKey'   => $identifierKey->value,
+            'identifierKey' => $identifierKey->value,
             'identifierValue' => $identifierKey === IdentifierKey::PHONE_NUMBER
                 ? $contact->getPhoneNumber()
                 : $contact->getEmailAddress(),
@@ -57,8 +61,8 @@ abstract class Message
                 ],
             ],
             'receiver' => [
-                'contacts' => $this->contacts
-            ]
+                'contacts' => $this->contacts,
+            ],
         ];
     }
 }

@@ -11,6 +11,7 @@ use Spits\Bird\Models\Contact;
 class SMSMessage extends Message implements IsBirdMessage
 {
     public ChannelType $viaChannel = ChannelType::SMS;
+
     public MessageType $messageType = MessageType::TEXT;
 
     public function toContact(Contact $contact): static

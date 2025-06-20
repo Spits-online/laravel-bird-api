@@ -1,11 +1,12 @@
 <?php
 
-namespace Spits\Bird\Notifications\Channels;
+namespace Spits\Bird\Channels;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Http;
 use Spits\Bird\Concerns\IsNotificationChannel;
 use Spits\Bird\Contracts\BirdConnection;
+use Spits\Bird\Exceptions\InvalidParameterException;
 use Spits\Bird\Exceptions\NotificationNotSent;
 
 class EmailChannel implements IsNotificationChannel
@@ -17,7 +18,7 @@ class EmailChannel implements IsNotificationChannel
         return '';
     }
 
-    public function getMessage($notifiable, Notification $notification)
+    public function getMessage($notifiable, Notification $notification): mixed
     {
         if (! method_exists($notification, 'toBirdEmail')) {
             throw new \InvalidArgumentException('Notification does not implement toBirdEmail method');
@@ -26,9 +27,15 @@ class EmailChannel implements IsNotificationChannel
         return $notification->toBirdEmail($notification);
     }
 
+    /**
+     * @throws InvalidParameterException
+     * @throws NotificationNotSent
+     * @throws ConnectionException
+     */
     public function send(mixed $notifiable, Notification $notification): void
     {
-        $message = $this->getMessage($notification);
+        /** @var Notification $notification */
+        $message = $this->getMessage($notification, $notification);
 
         $response = $this->birdRequest($this->channelEndpoint(), $message->toArray());
 
