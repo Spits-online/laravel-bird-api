@@ -3,29 +3,32 @@
 namespace Spits\Bird\Messages;
 
 use Spits\Bird\Enums\ChannelType;
-use Spits\Bird\Models\Template;
+use Spits\Bird\Support\MessageTemplate;
 
 class WhatsappMessage extends Message
 {
     public ChannelType $viaChannel = ChannelType::WHATSAPP;
 
     public function __construct(
-        protected Template $template,
-        protected string $receiver
-    ) {}
+        protected string          $receiver,
+        protected ?MessageTemplate $template = null,
+        protected array $body = [],
+    ) {
+        if (is_null($this->template) && empty($this->body)) {
+            throw new \InvalidArgumentException('WhastsappMessage requires either a template or body');
+        }
+    }
 
     #[\Override]
     public function toArray(): array
     {
         $message['receiver']['contacts'] = [
-            ['identifierValue' => $this->receiver],
+            [
+                'identifierKey' => "phonenumber",
+                'identifierValue' => $this->receiver],
         ];
 
-        $message['template'] = [
-            'projectId' => $this->template->getProjectId(),
-            'version'   => $this->template->getVersion(),
-            'variables' => $this->template->getParameters(),
-        ];
+        $message['template'] = $this->template->toArray();
 
         return $message;
     }

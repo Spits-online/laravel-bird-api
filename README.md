@@ -120,7 +120,7 @@ use Spits\Bird\Services\ContactService;
 $contact = (new Contact())
     ->displayName('John Doe')
     ->phoneNumber('+12345678901')
-    ->emailAdress('johndoe@mail.com');
+    ->emailAddress('johndoe@mail.com');
 
 $response = (new ContactService())->createOrUpdate($contact, IdentifierKey::PHONE_NUMBER);
 ```
@@ -167,7 +167,7 @@ use Spits\Bird\Models\Contact;
 $contact = (new Contact())
     ->displayName('Jane Doe')
     ->phoneNumber('+98765432103')
-    ->emailAdress('jane@example.com')
+    ->emailAddress('jane@example.com')
     ->attribute('company', 'Acme Corp');
 
 // The contact can then be passed to the `ContactService` for API interaction
@@ -176,7 +176,7 @@ $contact = (new Contact())
 ##### Contact Methods:
 - `displayName(string $name)`: Sets the display name of the contact.
 - `phoneNumber(string $number)`: Sets the phone number of the contact. 
-- `emailAdress(string $email)`: Sets the email address of the contact.
+- `emailAddress(string $email)`: Sets the email address of the contact.
 - `attribute(string $attribute, mixed $value)`: Adds additional attributes to the contact.
 - `toArray()`: Converts the contact into an array for sending to Bird API.
 
@@ -221,7 +221,7 @@ class OrderNotification extends Notification
         $contact = (new Contact())
             ->displayName('Jane Doe')
             ->phoneNumber('+98765432103')
-            ->emailAdress('jane@example.com')
+            ->emailAddress('jane@example.com')
             ->attribute('company', 'Acme Corp');
         
         return (new SMSMessage())
@@ -240,7 +240,7 @@ You can send the notification using Laravel's `Notification` facade or the `noti
 ### config
 In the `bird.php` config file you'll see `templates` array and in there the empty `whatsapp` key.\
 Follow the example below to add the keys belonging to your template.\
-Recommended way  is to place the keys in your .env
+Recommended way is to place the keys in your .env
 
 ```php
 
@@ -257,18 +257,25 @@ Recommended way  is to place the keys in your .env
 To send a message through WhatsApp create you own Notification class.\
 That should then use our `WhatsappMessage` class. Example below
 
+Whatsapp messages either require `template` or `body` to be send.
+
+The example below utilises our `MessageTemplate` support class, which enforces certain attributes needed when using message templates.
+
+When using the `body` parameter refer to the [Bird  docs](https://docs.bird.com/api/channels-api/supported-channels/programmable-whatsapp/sending-whatsapp-messages#post-workspaces-workspaceid-channels-channelid-messages) for the needed array keys 
 ```php
 <?php
 
 namespace App\Notifications;
 
-use Illuminate\Notifications\Notification;use Spits\Bird\Channels\WhatsappChannel;use Spits\Bird\Models\Messages\WhatsappMessage;
+use App\Support\MessageTemplate;
+use Boilerplate\Notifications\BaseNotification;
+use Carbon\Carbon;
+use Spits\Bird\Channels\WhatsappChannel;
+use Spits\Bird\Messages\WhatsappMessage;
 
-class WhatsappNotification extends Notification
+class WhatsappNotification extends BaseNotification
 {
-    public function __construct(
-        public string $content
-    )
+    public function __construct()
     {
         $this->setChannels([
             WhatsappChannel::class
@@ -276,26 +283,74 @@ class WhatsappNotification extends Notification
     }
 
     public function toWhatsapp($notifiable): WhatsappMessage {
+
         $message = new WhatsappMessage(
-            config('bird.templates.whatsapp.foo_message.template_project_id'),
-            config('bird.templates.whatsapp.foo_message.template_version'),
-            config('bird.templates.whatsapp.foo_message.template_locale'),
-            receiver: '+31'.$notifiable->phone_number,
-            templateVariables: [
-                'variables' => `set in template`
-                ]
+            receiver: $notifiable->phone_number,
+            template: new MessageTemplate(
+                projectId: config('bird.templates.whatsapp.foo_template.template_project_id')
+                version: config('bird.templates.whatsapp.foo_template.template_version'),
+                locale: config('bird.templates.whatsapp.foo_template.template_locale')
+                variables: [
+                    'receiverFirstName' => $notifiable->first_name,
+                    'senderFullName' => 'Foo bar',
+                ]),
         );
+
         return $message;
     }
 }
 
+
 ```
 
-
+Then in your controller you can a message as following
 ```php
-use Illuminate\Support\Facades\Notification;
+public function sendWhatsappMessage(NotificationRequest $request)
+    {
+        //Make sure you send the correct contact identifiers
+        // Default is phonenumbers for the WhatsappChannel
+        $users = User::all();
+        try {
+            Notification::send($users, new WhatsappNotification());
+        } catch (Exception $exception) {
+            Log::info($exception->getMessage());
+        }
+    }
+}
+```
 
-Notification::send($user, new OrderNotification());
+### Advanced Usage
+You can also override the `MessageTemplate` class so you can set defaults for the constructor params
+
+In the example below we gave default values for a Whatsapp Template.\ 
+Simultaneously setting `variables` as a required param.\
+These variables should correlate with the variables placed in the template created in your Bird environment
+```php
+<?php
+
+namespace App\Support;
+
+use Spits\Bird\Support\MessageTemplate;
+
+class WhatsappOverrideTemplate extends MessageTemplate
+{
+    public function __construct(
+        array $variables,
+        ?string $projectId = null,
+        ?string $version = null,
+        ?string $locale = null,
+    )
+    {
+
+        parent::__construct(
+            projectId: $projectId ?? config('bird.templates.whatsapp.test_message.template_project_id'),
+            version: $version ?? config('bird.templates.whatsapp.test_message.template_version'),
+            locale: $locale ?? config('bird.templates.whatsapp.test_message.template_locale'),
+            variables: $variables
+        );
+    }
+}
+
 ```
 
 
