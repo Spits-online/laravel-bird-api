@@ -28,7 +28,13 @@ class WhatsappMessage extends Message
                 'identifierValue' => $this->receiver],
         ];
 
-        $message['template'] = $this->template->toArray();
+        if ($this->template) {
+            $message['template'] = $this->template->toArray();
+        }
+
+        if ($this->body) {
+            $message['body'] = $this->body;
+        }
 
         return $message;
     }
