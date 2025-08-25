@@ -13,9 +13,9 @@ trait BirdConnection
     /**
      * Generates the headers required for API requests to the Bird platform.
      *
-     * @throws InvalidParameterException
-     *
      * @return array The headers for Bird API
+     *
+     * @throws InvalidParameterException
      */
     protected function headers(): array
     {
@@ -26,7 +26,7 @@ trait BirdConnection
         }
 
         return [
-            'Content-Type'  => 'application/json',
+            'Content-Type' => 'application/json',
             'Authorization' => "Bearer $accessKey",
         ];
     }
@@ -36,12 +36,10 @@ trait BirdConnection
      * It retrieves the workspace ID from the application's configuration and throws an exception if it's not set.
      *
      * @throws InvalidParameterException
-     * @param string|null $path
-     * @return string
      */
     protected function endpoint(?string $path = null): string
     {
-        $apiEndpoint =  'https://api.bird.com';
+        $apiEndpoint = 'https://api.bird.com';
         $workspaceID = config('bird.workspace_id');
 
         if (! $workspaceID) {
@@ -61,9 +59,8 @@ trait BirdConnection
      * @throws InvalidParameterException
      * @throws ConnectionException
      */
-    protected function birdRequest(string $url, ?array $params = null, string $method = 'post'): PromiseInterface | Response
+    protected function birdRequest(string $url, ?array $params = null, string $method = 'post'): PromiseInterface|Response
     {
-        return Http::withHeaders($this->headers())
-            ->{$method}($url, $params);
+        return Http::withHeaders($this->headers())->{$method}($url, $params);
     }
 }

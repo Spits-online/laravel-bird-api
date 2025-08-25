@@ -1,15 +1,16 @@
 <?php
 
-namespace Spits\Bird\Notifications\Channels;
+namespace Spits\Bird\Channels;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Notifications\Notification;
 use Spits\Bird\Concerns\IsNotificationChannel;
 use Spits\Bird\Contracts\BirdConnection;
 use Spits\Bird\Exceptions\InvalidParameterException;
 use Spits\Bird\Exceptions\NotificationNotSent;
-use Spits\Bird\Messages\WhatsappMessage;
+use Spits\Bird\Messages\SMSMessage;
 
-class WhatsappChannel implements IsNotificationChannel
+class SMSChannel implements IsNotificationChannel
 {
     use BirdConnection;
 
@@ -18,10 +19,10 @@ class WhatsappChannel implements IsNotificationChannel
      */
     public function channelEndpoint(): string
     {
-        $channelID = config('bird.channels.whatsapp');
+        $channelID = config('bird.channels.sms');
 
         if (! $channelID) {
-            throw InvalidParameterException::configValueIsNotSet('bird.channels.whatsapp');
+            throw InvalidParameterException::configValueIsNotSet('bird.channels.sms');
         }
 
         return $this->endpoint("channels/$channelID/messages");
@@ -29,11 +30,11 @@ class WhatsappChannel implements IsNotificationChannel
 
     public function getMessage(mixed $notifiable, Notification $notification): mixed
     {
-        if (! method_exists($notification, 'toWhatsapp')) {
-            throw new \InvalidArgumentException('Notification does not implement toWhatsapp method');
+        if (! method_exists($notification, 'toSMS')) {
+            throw new \InvalidArgumentException('Notification does not implement toSMS method');
         }
 
-        return $notification->toWhatsapp($notifiable, $notification);
+        return $notification->toSMS($notifiable, $notification);
     }
 
     /**
@@ -45,7 +46,7 @@ class WhatsappChannel implements IsNotificationChannel
      */
     public function send(mixed $notifiable, Notification $notification): void
     {
-        /** @var WhatsappMessage $message */
+        /** @var SMSMessage $message */
         $message = $this->getMessage($notifiable, $notification);
 
         $response = $this->birdRequest($this->channelEndpoint(), $message->toArray());

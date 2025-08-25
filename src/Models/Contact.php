@@ -45,11 +45,11 @@ class Contact
     /**
      * Set the email for this contact
      */
-    public function emailAdress(string $emailAdress): static
+    public function emailAddress(string $emailAddress): static
     {
         $this->identifiers[] = [
             'key' => 'emailaddress',
-            'value' => $emailAdress,
+            'value' => $emailAddress,
         ];
 
         return $this;
@@ -96,7 +96,7 @@ class Contact
     /**
      * Get the contact as an array or object
      */
-    public function toArray(): array | object
+    public function toArray(): array|object
     {
         return [
             'displayName' => $this->displayName,

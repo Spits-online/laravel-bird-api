@@ -2,7 +2,4 @@
 
 namespace Spits\Bird\Messages;
 
-class EmailMessage
-{
-
-}
+class EmailMessage {}
