@@ -1,5 +1,7 @@
 <?php
 
+use Spits\Bird\BirdServiceProvider;
+
 it('loads the package config', function () {
     expect(config('bird'))->toBeArray()
         ->and(config('bird'))->toHaveKey('access_key')
@@ -8,5 +10,5 @@ it('loads the package config', function () {
 
 it('registers the service provider', function () {
     expect(app()->getLoadedProviders())
-        ->toHaveKey(\Spits\Bird\BirdServiceProvider::class);
+        ->toHaveKey(BirdServiceProvider::class);
 });
