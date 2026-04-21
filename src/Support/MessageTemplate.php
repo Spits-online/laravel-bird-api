@@ -15,71 +15,68 @@ class MessageTemplate
         protected ?array $parameters = null,
         protected ?array $settings = null,
 
-    )
-    {
-
-    }
+    ) {}
 
     public function toArray(): array
     {
         return [
-            'projectId'     => $this->projectId,
-            'version'       => $this->version,
-            'locale'        => $this->locale,
-            'attachments'   => $this->attachments,
-            'shortLinks'    => $this->shortLinks,
-            'variables'     => $this->variables,
+            'projectId' => $this->projectId,
+            'version' => $this->version,
+            'locale' => $this->locale,
+            'attachments' => $this->attachments,
+            'shortLinks' => $this->shortLinks,
+            'variables' => $this->variables,
             'utmParameters' => $this->utmParameters,
-            'parameters'    => $this->parameters,
-            'settings'      => $this->settings,
+            'parameters' => $this->parameters,
+            'settings' => $this->settings,
         ];
     }
 
-//    public function projectId(string $projectId): static
-//    {
-//        $this->projectId = $projectId;
-//
-//        return $this;
-//    }
-//
-//    public function version(string $version): static
-//    {
-//        $this->version = $version;
-//
-//        return $this;
-//    }
-//
-//    public function locale(string $locale): static
-//    {
-//        $this->locale = $locale;
-//
-//        return $this;
-//    }
-//
-//    public function parameters(array $parameters): static
-//    {
-//        $this->parameters = $parameters;
-//
-//        return $this;
-//    }
-//
-//    public function getProjectId(): string
-//    {
-//        return $this->projectId;
-//    }
-//
-//    public function getVersion(): string
-//    {
-//        return $this->version;
-//    }
-//
-//    public function getLocale(): string
-//    {
-//        return $this->locale;
-//    }
-//
-//    public function getParameters(): array
-//    {
-//        return $this->parameters;
-//    }
+    //    public function projectId(string $projectId): static
+    //    {
+    //        $this->projectId = $projectId;
+    //
+    //        return $this;
+    //    }
+    //
+    //    public function version(string $version): static
+    //    {
+    //        $this->version = $version;
+    //
+    //        return $this;
+    //    }
+    //
+    //    public function locale(string $locale): static
+    //    {
+    //        $this->locale = $locale;
+    //
+    //        return $this;
+    //    }
+    //
+    //    public function parameters(array $parameters): static
+    //    {
+    //        $this->parameters = $parameters;
+    //
+    //        return $this;
+    //    }
+    //
+    //    public function getProjectId(): string
+    //    {
+    //        return $this->projectId;
+    //    }
+    //
+    //    public function getVersion(): string
+    //    {
+    //        return $this->version;
+    //    }
+    //
+    //    public function getLocale(): string
+    //    {
+    //        return $this->locale;
+    //    }
+    //
+    //    public function getParameters(): array
+    //    {
+    //        return $this->parameters;
+    //    }
 }

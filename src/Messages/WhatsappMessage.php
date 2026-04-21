@@ -10,7 +10,7 @@ class WhatsappMessage extends Message
     public ChannelType $viaChannel = ChannelType::WHATSAPP;
 
     public function __construct(
-        protected string          $receiver,
+        protected string $receiver,
         protected ?MessageTemplate $template = null,
         protected array $body = [],
     ) {
@@ -24,7 +24,7 @@ class WhatsappMessage extends Message
     {
         $message['receiver']['contacts'] = [
             [
-                'identifierKey' => "phonenumber",
+                'identifierKey' => 'phonenumber',
                 'identifierValue' => $this->receiver],
         ];
 
