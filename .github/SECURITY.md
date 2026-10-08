@@ -5,8 +5,7 @@
 | Version | Supported |
 |---|---|
 | 2.x | ✅ bug and security fixes |
-| 1.x | 🔒 security fixes until 2027-05-31 |
-| older | ❌ |
+| 1.x | ❌ no longer supported |
 
 ## Reporting a vulnerability
 

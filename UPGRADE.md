@@ -2,7 +2,7 @@
 
 ## From 1.x to 2.0
 
-Version 2 is a rewrite. Most changes are renames you can do with search and replace.
+Version 2 is a rewrite. Most changes are renames you can do with search and replace. Version 1 is no longer supported and won't get bug or security fixes.
 
 ### Checklist
 
@@ -88,7 +88,9 @@ After:
 public function toBirdWhatsApp(object $notifiable): WhatsAppMessage
 {
     return WhatsAppMessage::template(
-        Template::named('foo_template', ['receiverFirstName' => $notifiable->first_name]),
+        Template::named('foo_template', [
+            'receiverFirstName' => $notifiable->first_name,
+        ]),
     );
 }
 ```
@@ -97,7 +99,10 @@ The config entry loses its `whatsapp` level and the `template_` prefixes:
 
 ```php
 'templates' => [
-    'foo_template' => ['project_id' => '…', 'version' => 'latest', 'locale' => 'nl'],
+    'foo_template' => [
+        'project_id' => '…',
+        'locale' => 'nl',
+    ],
 ],
 ```
 
