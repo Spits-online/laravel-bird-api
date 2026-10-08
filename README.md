@@ -1,378 +1,302 @@
-![image](https://repository-images.githubusercontent.com/820425309/723992d8-e187-420a-8bb6-b23c2991b8ca)
+<div align="left">
+  <a href="https://github.com/Spits-online/laravel-bird-api">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Spits-online/laravel-bird-api/main/art/banner-dark.png">
+      <img alt="Laravel Bird API by Spits" src="https://raw.githubusercontent.com/Spits-online/laravel-bird-api/main/art/banner-light.png">
+    </picture>
+  </a>
 
-# Bird.com API Support for Laravel
+<h1>Bird SMS and WhatsApp for Laravel</h1>
 
-1. [Introduction](#overview)
-    - [Why This Package?](#why-this-package)
-2. [Installation](#installation)
-    - [Prerequisites](#prerequisites)
-    - [Step-by-Step Installation](#step-by-step-installation)
-3. [Configuration](#configuration)
-4. [Usage](#usage)
-    - [1. Contact Management](#1-contact-management)
-        - [Retrieve Contacts](#retrieve-contacts)
-        - [Retrieve a Single Contact](#retrieving-a-single-contact)
-        - [Create or Update Contacts](#create-or-update-contacts)
-        - [Delete Contacts](#delete-contacts)
-        - [Contact Model Overview](#contact-model-overview)
-    - [2. Sending Notifications](#2-sending-notifications)
-        - [Supported Notification Channels](#supported-notification-channels)
-        - [Example: Sending SMS Notifications](#example-sending-sms-notifications)
-5. [Exception Handling](#exception-handling)
-6. [Contributing](#contributing)
-7. [License](#license)
-8. [Contact](#contact)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/spits-online/laravel-bird-api.svg?style=flat-square)](https://packagist.org/packages/spits-online/laravel-bird-api)
+[![Tests](https://img.shields.io/github/actions/workflow/status/Spits-online/laravel-bird-api/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/Spits-online/laravel-bird-api/actions/workflows/run-tests.yml)
+[![PHPStan](https://img.shields.io/github/actions/workflow/status/Spits-online/laravel-bird-api/phpstan.yml?branch=main&label=phpstan&style=flat-square)](https://github.com/Spits-online/laravel-bird-api/actions/workflows/phpstan.yml)
+[![Total Downloads](https://img.shields.io/packagist/dt/spits-online/laravel-bird-api.svg?style=flat-square)](https://packagist.org/packages/spits-online/laravel-bird-api)
 
+</div>
 
-## Overview
-The Laravel Bird Package simplifies integrating the powerful MessageBird API into your Laravel applications. 
-It provides a user-friendly way to manage contacts and send notifications via SMS, WhatsApp, email, and more. 
-This package is designed to make communication between [Laravel](https://laravel.com) and [Bird](https://bird.com)
-(AKA MessageBird) seamless and efficient.
+Notification channels for [Bird](https://bird.com) (formerly MessageBird), plus a small client for the contacts in your workspace.
 
-### Why This Package?
-- **Ease of Use**: Straightforward methods to interact with Bird's API.
-- **Multi-Channel Support**: Send notifications via SMS, WhatsApp, Email, Telegram, and more.
-- **Contact Management**: Create, update, retrieve, or delete contacts in Bird directly from your application.
-- **Error Handling**: Built-in exception classes for better debugging and recovery.
+```php
+use Illuminate\Notifications\Notification;
+use SpitsOnline\Bird\Channels\SmsChannel;
+use SpitsOnline\Bird\Messages\SmsMessage;
 
-[//]: # (- **Dynamic Templates**: Leverage reusable templates for consistent notifications.)
+class OrderShipped extends Notification
+{
+    public function via(object $notifiable): array
+    {
+        return [SmsChannel::class];
+    }
 
+    public function toBirdSms(object $notifiable): SmsMessage
+    {
+        return SmsMessage::create('Your order has shipped!');
+    }
+}
+```
+
+## Requirements
+
+- PHP 8.3+
+- Laravel 12 or 13
+- A Bird workspace with an SMS and/or WhatsApp channel
 
 ## Installation
 
-### Prerequisites
-Before installing this package, ensure your system meets the following requirements:
-- **PHP**: Version `^8.3`
-- **Laravel**: Version `^10.0`, `^11.0`, `^12.0`
-- **Bird Account**
-
-### Step-by-Step Installation
-1. Add the package to your Laravel project using Composer:
-    ```bash
-    composer require spits-online/laravel-bird-api
-   ```
-2. Once installed, the package will automatically register the `BirdServiceProvider` using Laravel's package auto-discovery.
-3. Run the following command to publish the package configuration:
-   ```bash
-   php artisan vendor:publish --tag="bird-config"
-    ```
-   This will create a `config/bird.php` file in your application.
-
-
-## Configuration
-
-The `config/bird.php` file contains all configurable options, including:
-
-- API Access Key: Set your Bird.com API access key via `BIRD_ACCESS_KEY` in the .env file.
-- Workspace ID: Define your workspace using the `BIRD_WORKSPACE_ID` environment variable.
-- Channel IDs: Specify channel IDs (e.g., SMS, WhatsApp, Email) for notifications in your .env file:
-    ```env
-    BIRD_ACCESS_KEY={your-bird-access-key}
-    BIRD_SMS_CHANNEL_ID={your-sms-channel-id}
-    ```
-For detailed configuration options, refer to the comments within the config/bird.php file.
-
-## Usage
-
-### 1. Contact Management
-
-This package provides functionality for managing contacts via the Bird API. Below are the key actions you can perform with the `ContactService`.
-
-#### Retrieve Contacts
-You can retrieve a list of contacts using the `index()` method. This allows you to specify the number of contacts to retrieve and whether to reverse the order of the results. 
-To be able to retrieve the contacts, make sure you have specified your `BIRD_WORKSPACE_ID` in you `.env` file.
-
-```php
-use Spits\Bird\Services\ContactService;
-
-$birdContacts = app(new ContactService())->index(limit: 20, reverse: true);
+```bash
+composer require spits-online/laravel-bird-api
 ```
 
-Parameters:
-- `limit`: The number of contacts to retrieve (default is 10).
-- `reverse`: Set to `true` to retrieve contacts in reverse order.
-- `nextPageToken`: Use for pagination when retrieving the next set of results.
+Add your credentials to `.env`. Only the channels you use need an id.
 
-
-#### Retrieving a single contact
-You can also retrieve a single contact using the `show()` method. This allows you to get only one contact by specifying its id.
-
-```php
-use Spits\Bird\Services\ContactService;
-
-$birdContact = app(new ContactService())->show('bird-contact-id-123');
+```env
+BIRD_ACCESS_KEY=
+BIRD_WORKSPACE_ID=
+BIRD_SMS_CHANNEL_ID=
+BIRD_WHATSAPP_CHANNEL_ID=
 ```
 
-Parameters:
-- `contactId`: The id of the contact
+You'll find these in Bird:
 
-#### Create or Update Contacts
-You can create or update a contact by passing a `Contact` object to the `createOrUpdate()` method. 
-This method requires the contact's identifier (phone number or email address)
-to determine whether to create a new contact or update an existing one.
+- **Access key:** Settings → Access keys.
+- **Workspace id:** Settings → Workspace.
+- **Channel ids:** Channels → your SMS or WhatsApp channel → Channel ID.
 
-```php
-use Spits\Bird\Models\Contact;
-use Spits\Bird\Enums\IdentifierKey;
-use Spits\Bird\Services\ContactService;
-
-$contact = (new Contact())
-    ->displayName('John Doe')
-    ->phoneNumber('+12345678901')
-    ->emailAddress('johndoe@mail.com');
-
-$response = (new ContactService())->createOrUpdate($contact, IdentifierKey::PHONE_NUMBER);
-```
-
-Parameters:
-- `Contact`: The `Contact` object containing the contact information.
-- `IdentifierKey`: The identifier type used to identify the contact (either `PHONE_NUMBER` or `EMAIL_ADDRESS`).
-
-
-#### Delete Contacts
-To delete a contact, simply call the `delete()` method with the contact's ID.
+That's all the configuration most apps need, so you don't have to publish a config file. When you do want to change something, such as [naming your WhatsApp templates](#naming-templates), create `config/bird.php` with **only the keys you change**. It's merged over the [package defaults](config/bird.php) key by key, so everything you leave out keeps its default:
 
 ```php
-use Spits\Bird\Services\ContactService;
-
-$response = (new ContactService())->delete('contact-id-123');
-
-if ($response === true) {
-    // Successfully deleted the contact
-    dd('Contact deleted successfully.');
-} else {
-    // Handle error
-    dd($response);
-}
-```
-
-Parameters:
-- `contactId`: The unique ID of the contact to be deleted.
-
-Return Values:
-- Returns `true` if the deletion was successful.
-- Returns an error response if the deletion failed.
-
----
-
-#### Contact Model Overview
-The `Contact` model provides an easy-to-use interface for building
-and manipulating contact records before sending them to the Bird API.
-
-##### Example Contact Creation
-```php
-use Spits\Bird\Models\Contact;
-
-$contact = (new Contact())
-    ->displayName('Jane Doe')
-    ->phoneNumber('+98765432103')
-    ->emailAddress('jane@example.com')
-    ->attribute('company', 'Acme Corp');
-
-// The contact can then be passed to the `ContactService` for API interaction
-```
-
-##### Contact Methods:
-- `displayName(string $name)`: Sets the display name of the contact.
-- `phoneNumber(string $number)`: Sets the phone number of the contact. 
-- `emailAddress(string $email)`: Sets the email address of the contact.
-- `attribute(string $attribute, mixed $value)`: Adds additional attributes to the contact.
-- `toArray()`: Converts the contact into an array for sending to Bird API.
-
-Ensure to validate the phone number using the regex defined in the configuration
-(`bird.phone_number_regex`) before sending it to the API.
-
----
-
-### 2. Sending Notifications
-
-This package supports a variety of notification channels, including SMS, WhatsApp, email, and more. 
-Below are the details on using the SMS channel for sending notifications, leveraging predefined templates, and handling advanced use cases.
-
-
-### Supported Notification Channels
-
-Currently, we only support the SMS channel. 
-This is not going to be the case soon though, 
-as we are planning on adding support for WhatsApp, facebook and telegram notification channels.
-
-### Example: Sending SMS Notifications
-
-The `SMSChannel` allows you to send SMS notifications by leveraging Laravel notification system.
-Make sure you are allowed to send SMS notifications using Bird.
-You need to configure an SMS channel before you can send SMS notifications. 
-
-#### Notification Class Example
-Define a custom notification class implementing the `toSMS` method.
-
-```php
-use Illuminate\Notifications\Notification;use Spits\Bird\Channels\SMSChannel;use Spits\Bird\Messages\SMSMessage;
-
-class OrderNotification extends Notification
-{
-    public function via(): array
-    {
-        return [ SMSChannel::class ];
-    }
-
-    public function toSMS($notifiable): SMSMessage
-    {
-        $contact = (new Contact())
-            ->displayName('Jane Doe')
-            ->phoneNumber('+98765432103')
-            ->emailAddress('jane@example.com')
-            ->attribute('company', 'Acme Corp');
-        
-        return (new SMSMessage())
-            ->text('Your order has been shipped!')
-            ->toContact($contact);
-    }
-}
-```
-
-
-#### Sending the Notification
-You can send the notification using Laravel's `Notification` facade or the `notify` method.
-
-## WhatsApp
-
-### config
-In the `bird.php` config file you'll see `templates` array and in there the empty `whatsapp` key.\
-Follow the example below to add the keys belonging to your template.\
-Recommended way is to place the keys in your .env
-
-```php
-
-'whatsapp' => [
-    'foo_template' => [
-        'template_project_id' => `template_project_id`,
-        'template_version' => `template_version`,
-        'template_locale' => `template_locale`,
+// config/bird.php
+return [
+    'templates' => [
+        'order_shipped' => ['project_id' => env('BIRD_ORDER_SHIPPED_TEMPLATE'), 'locale' => 'nl'],
     ],
-]
+];
 ```
 
-### usage
-To send a message through WhatsApp create you own Notification class.\
-That should then use our `WhatsappMessage` class. Example below
+Don't copy keys at their default value. A copied default looks like a deliberate choice, and it stops following the package when the default changes. To see every option, you can publish the full file with `php artisan vendor:publish --tag="bird-config"`. Keep the keys you change and delete the rest.
 
-Whatsapp messages either require `template` or `body` to be send.
+## Sending notifications
 
-The example below utilises our `MessageTemplate` support class, which enforces certain attributes needed when using message templates.
+### Choosing the recipient
 
-When using the `body` parameter refer to the [Bird  docs](https://docs.bird.com/api/channels-api/supported-channels/programmable-whatsapp/sending-whatsapp-messages#post-workspaces-workspaceid-channels-channelid-messages) for the needed array keys 
+The channels send to whatever `routeNotificationForBird()` on your notifiable returns: a phone number in international format, or an array of them to send to several people.
+
 ```php
-<?php
-
-namespace App\Notifications;
-
-use App\Support\MessageTemplate;
-use Boilerplate\Notifications\BaseNotification;
-use Carbon\Carbon;
-use Spits\Bird\Channels\WhatsappChannel;
-use Spits\Bird\Messages\WhatsappMessage;
-
-class WhatsappNotification extends BaseNotification
+class User extends Authenticatable
 {
-    public function __construct()
+    use Notifiable;
+
+    public function routeNotificationForBird(): string
     {
-        $this->setChannels([
-            WhatsappChannel::class
-        ]);
-    }
-
-    public function toWhatsapp($notifiable): WhatsappMessage {
-
-        $message = new WhatsappMessage(
-            receiver: $notifiable->phone_number,
-            template: new MessageTemplate(
-                projectId: config('bird.templates.whatsapp.foo_template.template_project_id')
-                version: config('bird.templates.whatsapp.foo_template.template_version'),
-                locale: config('bird.templates.whatsapp.foo_template.template_locale')
-                variables: [
-                    'receiverFirstName' => $notifiable->first_name,
-                    'senderFullName' => 'Foo bar',
-                ]),
-        );
-
-        return $message;
-    }
-}
-
-
-```
-
-Then in your controller you can a message as following
-```php
-public function sendWhatsappMessage(NotificationRequest $request)
-    {
-        //Make sure you send the correct contact identifiers
-        // Default is phonenumbers for the WhatsappChannel
-        $users = User::all();
-        try {
-            Notification::send($users, new WhatsappNotification());
-        } catch (Exception $exception) {
-            Log::info($exception->getMessage());
-        }
+        return $this->phone_number; // international format: +31612345678
     }
 }
 ```
 
-### Advanced Usage
-You can also override the `MessageTemplate` class so you can set defaults for the constructor params
+To send to someone else, set the recipient on the message (`->to('+31612345678')`), or send an on-demand notification:
 
-In the example below we gave default values for a Whatsapp Template.\ 
-Simultaneously setting `variables` as a required param.\
-These variables should correlate with the variables placed in the template created in your Bird environment
 ```php
-<?php
+Notification::route('bird', '+31612345678')->notify(new OrderShipped);
+```
 
-namespace App\Support;
+### SMS
 
-use Spits\Bird\Support\MessageTemplate;
+Add `SmsChannel` to `via()` and return an `SmsMessage` from `toBirdSms()`, as in the example at the top.
 
-class WhatsappOverrideTemplate extends MessageTemplate
+### WhatsApp
+
+To start a WhatsApp conversation you need a template approved in Bird Studio. Add `WhatsAppChannel` to `via()` and return a `WhatsAppMessage` from `toBirdWhatsApp()`:
+
+```php
+use SpitsOnline\Bird\Channels\WhatsAppChannel;
+use SpitsOnline\Bird\Messages\Template;
+use SpitsOnline\Bird\Messages\WhatsAppMessage;
+
+public function via(object $notifiable): array
 {
-    public function __construct(
-        array $variables,
-        ?string $projectId = null,
-        ?string $version = null,
-        ?string $locale = null,
-    )
-    {
-
-        parent::__construct(
-            projectId: $projectId ?? config('bird.templates.whatsapp.test_message.template_project_id'),
-            version: $version ?? config('bird.templates.whatsapp.test_message.template_version'),
-            locale: $locale ?? config('bird.templates.whatsapp.test_message.template_locale'),
-            variables: $variables
-        );
-    }
+    return [WhatsAppChannel::class];
 }
 
+public function toBirdWhatsApp(object $notifiable): WhatsAppMessage
+{
+    return WhatsAppMessage::template(
+        new Template(projectId: 'your-project-id', locale: 'nl', parameters: [
+            'name' => $notifiable->first_name,
+        ]),
+    );
+}
 ```
 
+The template's parameters are the variables you defined in Bird Studio. Each value is sent with a matching type: a boolean as `boolean`, an int or float as `number`, an array as `object`, and everything else as `string`. The version defaults to `latest`; pass `version:` to pin one.
 
-### Exception Handling
+#### Naming templates
 
-The package uses custom exceptions to handle errors:
+To avoid repeating project ids, give your templates a name in your app's `config/bird.php`. Each entry needs a `project_id`. `version` (default `latest`) and `locale` are optional:
 
-- `InvalidParameterException`: Thrown when a parameter is invalid.
-- `ConnectionException`: Thrown when there is a connection error with the API.
-- `NotAnSmsMessageException`: Thrown when the provided message is not an instance of `SMSMessage`.
-- `NotificationNotSent`: Thrown when the notification could not be sent.
+```php
+// config/bird.php
+return [
+    'templates' => [
+        'order_shipped' => [
+            'project_id' => env('BIRD_ORDER_SHIPPED_TEMPLATE'),
+            'locale' => 'nl',
+        ],
+        'appointment_reminder' => [
+            'project_id' => env('BIRD_APPOINTMENT_REMINDER_TEMPLATE'),
+            'version' => 'a1b2c3d4-…', // pin a version instead of using the latest
+            'locale' => 'en',
+        ],
+    ],
+];
+```
 
-Make sure to catch these exceptions in your code to handle errors gracefully.
+Then use them by name:
+
+```php
+return WhatsAppMessage::template(Template::named('order_shipped', ['name' => $notifiable->first_name]));
+```
+
+Inside WhatsApp's 24-hour service window you can also send any other [message body Bird supports](https://docs.bird.com/api/channels-api/supported-channels/programmable-whatsapp/sending-whatsapp-messages):
+
+```php
+WhatsAppMessage::body(['type' => 'text', 'text' => ['text' => 'Thanks, we received your reply.']]);
+```
+
+### SMS and WhatsApp together
+
+A notification can use both channels. Each one calls its own method:
+
+```php
+public function via(object $notifiable): array
+{
+    return [SmsChannel::class, WhatsAppChannel::class];
+}
+
+public function toBirdSms(object $notifiable): SmsMessage
+{
+    return SmsMessage::create('Your order has shipped!');
+}
+
+public function toBirdWhatsApp(object $notifiable): WhatsAppMessage
+{
+    return WhatsAppMessage::template(Template::named('order_shipped', ['name' => $notifiable->first_name]));
+}
+```
+
+### Sending without a notification
+
+```php
+use SpitsOnline\Bird\Facades\Bird;
+use SpitsOnline\Bird\Messages\SmsMessage;
+
+$sent = Bird::send(SmsMessage::create('Your code is 123456')->to('+31612345678'));
+
+$sent->id;     // Bird's message id
+$sent->status; // "accepted"
+```
+
+Pass a `channelId` to send through a channel other than the configured one: `Bird::send($message, channelId: '…')`.
+
+## Managing contacts
+
+```php
+use SpitsOnline\Bird\Facades\Bird;
+
+// Create the contact, or update it if one with this phone number or email exists
+$contact = Bird::contacts()->upsert('+31612345678', ['firstName' => 'Jane', 'lastName' => 'Doe']);
+
+$contact = Bird::contacts()->find($contactId);
+$contact->displayName;  // "Jane Doe"
+$contact->phoneNumber;  // "+31612345678"
+$contact->emailAddress; // "jane@example.com" or null
+$contact->attributes;   // ['firstName' => 'Jane', ...]
+
+Bird::contacts()->delete($contactId);
+```
+
+Contacts are listed a page at a time:
+
+```php
+$page = Bird::contacts()->list(limit: 100);
+
+foreach ($page->contacts as $contact) {
+    // ...
+}
+
+$next = Bird::contacts()->list(limit: 100, pageToken: $page->nextPageToken); // null on the last page
+```
+
+## Error handling
+
+Every exception extends `SpitsOnline\Bird\Exceptions\BirdException`:
+
+| Exception | When |
+|---|---|
+| `RequestFailed` | Bird returned an error. `$status`, `$errorCode` and `$body` hold what Bird sent back. |
+| `ConnectionFailed` | Bird couldn't be reached. |
+| `MissingConfiguration` | An env value is missing, or `Template::named()` gets a name that isn't in `config/bird.php`. The message says what to set. |
+| `InvalidRecipient` | A notification has no recipient. |
+| `BirdException` | A notification uses a channel but doesn't have its `toBirdSms()` or `toBirdWhatsApp()` method. |
+
+```php
+use SpitsOnline\Bird\Exceptions\RequestFailed;
+
+try {
+    $contact = Bird::contacts()->find($contactId);
+} catch (RequestFailed $e) {
+    if ($e->status === 404) {
+        // the contact doesn't exist
+    }
+
+    throw $e;
+}
+```
+
+When a channel throws, Laravel fires its `NotificationFailed` event. For queued notifications, the job is retried as usual.
+
+## Testing your app
+
+`Bird::fake()` records messages instead of sending them:
+
+```php
+use SpitsOnline\Bird\Facades\Bird;
+use SpitsOnline\Bird\Messages\Message;
+
+Bird::fake();
+
+$user->notify(new OrderShipped);
+
+Bird::assertSent(fn (Message $message) => $message->recipients()[0]->value === $user->phone_number);
+Bird::assertNotSent(fn (Message $message) => /* ... */);
+Bird::assertNothingSent();
+```
+
+Contact calls go through Laravel's HTTP client, so fake them with `Http::fake()`.
+
+## Testing
+
+```bash
+composer test
+```
+
+## Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently. Upgrading from 1.x? See [UPGRADE](UPGRADE.md).
 
 ## Contributing
 
-Please submit issues and pull requests to the [GitHub repository](https://github.com/Spits-online/laravel-bird-api).
+Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
+
+## Security vulnerabilities
+
+Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+
+## Credits
+
+- [Spits](https://spits.online)
+- [All Contributors](../../contributors)
 
 ## License
 
-This package is open-sourced software licensed under the [MIT license](LICENSE).
-
-## Contact
-
-For any inquiries or support, please contact [Spits](mailto:webapps@spits.online).
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.

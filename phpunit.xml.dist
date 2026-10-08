@@ -16,7 +16,7 @@
          backupStaticProperties="false"
 >
     <testsuites>
-        <testsuite name="Spits Test Suite">
+        <testsuite name="Laravel Bird API">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
@@ -25,8 +25,4 @@
             <directory>src/</directory>
         </include>
     </source>
-    <php>
-        <env name="BIRD_ACCESS_KEY" value="test-key"/>
-        <env name="BIRD_WORKSPACE_ID" value="test-workspace"/>
-    </php>
 </phpunit>

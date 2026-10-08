@@ -1,68 +1,66 @@
 <?php
 
-namespace Spits\Bird\Messages;
+declare(strict_types=1);
 
-use Spits\Bird\Contracts\HasBirdMessage;
-use Spits\Bird\Enums\ChannelType;
-use Spits\Bird\Enums\IdentifierKey;
-use Spits\Bird\Enums\MessageType;
-use Spits\Bird\Models\Contact;
+namespace SpitsOnline\Bird\Messages;
+
+use SpitsOnline\Bird\Data\Identifier;
 
 abstract class Message
 {
-    use HasBirdMessage;
+    /** @var list<Identifier> */
+    protected array $recipients = [];
 
-    public ChannelType $viaChannel;
+    /**
+     * The `bird.channels` key this message is sent through.
+     */
+    abstract public function channel(): string;
 
-    public MessageType $messageType;
+    /**
+     * The `body` or `template` part of the request.
+     *
+     * @return array<string, mixed>
+     */
+    abstract protected function content(): array;
 
-    public array $contacts = [];
-
-    public array $actions = [];
-
-    public string $text;
-
-    public function text(string $text): static
+    /**
+     * Add recipients: phone numbers, email addresses or Identifiers.
+     */
+    public function to(Identifier|string ...$recipients): static
     {
-        $this->text = $text;
+        foreach ($recipients as $recipient) {
+            $this->recipients[] = Identifier::from($recipient);
+        }
 
         return $this;
     }
 
-    public function addContact(Contact $contact, IdentifierKey $identifierKey): static
+    /**
+     * @return list<Identifier>
+     */
+    public function recipients(): array
     {
-        $this->contacts[] = [
-            'identifierKey' => $identifierKey->value,
-            'identifierValue' => $identifierKey === IdentifierKey::PHONE_NUMBER
-                ? $contact->getPhoneNumber()
-                : $contact->getEmailAddress(),
-        ];
-
-        return $this;
+        return $this->recipients;
     }
 
-    public function addAction(string $action, array $parameters = []): static
+    public function hasRecipients(): bool
     {
-        $this->actions[] = [
-            'action' => $action,
-            'parameters' => $parameters,
-        ];
-
-        return $this;
+        return $this->recipients !== [];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return [
-            'body' => [
-                'type' => $this->messageType->value,
-                $this->messageType->value => [
-                    'text' => $this->text,
-                ],
-            ],
             'receiver' => [
-                'contacts' => $this->contacts,
+                'contacts' => array_map(fn (Identifier $recipient) => [
+                    'identifierKey' => $recipient->key->value,
+                    'identifierValue' => $recipient->value,
+                ], $this->recipients),
             ],
+            ...$this->content(),
         ];
     }
 }

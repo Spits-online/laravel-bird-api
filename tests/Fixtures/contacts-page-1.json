@@ -1,0 +1,7 @@
+{
+  "results": [
+    { "id": "c-1", "computedDisplayName": "Jane Doe", "featuredIdentifiers": [{ "key": "phonenumber", "value": "+31612345678" }], "attributes": {} },
+    { "id": "c-2", "computedDisplayName": "John Doe", "featuredIdentifiers": [{ "key": "emailaddress", "value": "john@example.com" }], "attributes": {} }
+  ],
+  "nextPageToken": "page-2-token"
+}

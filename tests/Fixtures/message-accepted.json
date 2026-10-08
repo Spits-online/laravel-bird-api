@@ -1,0 +1,9 @@
+{
+  "id": "e2b8c1a4-5f6d-4e7a-8b9c-0d1e2f3a4b5c",
+  "channelId": "sms-channel",
+  "receiver": { "contacts": [{ "identifierKey": "phonenumber", "identifierValue": "+31612345678" }] },
+  "body": { "type": "text", "text": { "text": "Your order has shipped" } },
+  "status": "accepted",
+  "direction": "outgoing",
+  "createdAt": "2026-10-08T10:00:00Z"
+}

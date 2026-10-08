@@ -1,20 +1,19 @@
-# Path-based git attributes
-# https://www.kernel.org/pub/software/scm/git/docs/gitattributes.html
-
-# Ignore all test and documentation with "export-ignore".
-/.github            export-ignore
-/.gitattributes     export-ignore
-/.gitignore         export-ignore
-/phpunit.xml.dist   export-ignore
-/art                export-ignore
-/docs               export-ignore
-/tests              export-ignore
-/workbench          export-ignore
-/.editorconfig      export-ignore
-/.php_cs.dist.php   export-ignore
-/psalm.xml          export-ignore
-/psalm.xml.dist     export-ignore
-/testbench.yaml     export-ignore
-/UPGRADING.md       export-ignore
-/phpstan.neon.dist  export-ignore
+# Keep everything that isn't needed at runtime out of the dist archive.
+/.github                export-ignore
+/.gitlab                export-ignore
+/.gitlab-ci.yml         export-ignore
+/.gitattributes         export-ignore
+/.gitignore             export-ignore
+/.editorconfig          export-ignore
+/art                    export-ignore
+/docs                   export-ignore
+/tests                  export-ignore
+/workbench              export-ignore
+/build                  export-ignore
+/phpunit.xml.dist       export-ignore
+/phpstan.neon.dist      export-ignore
 /phpstan-baseline.neon  export-ignore
+/pint.json              export-ignore
+/renovate.json          export-ignore
+/testbench.yaml         export-ignore
+/UPGRADE.md             export-ignore

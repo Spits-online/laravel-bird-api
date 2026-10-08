@@ -1,26 +1,24 @@
 <?php
 
-namespace Spits\Bird\Tests;
+declare(strict_types=1);
+
+namespace SpitsOnline\Bird\Tests;
 
 use Orchestra\Testbench\TestCase as Orchestra;
-use Spits\Bird\BirdServiceProvider;
+use SpitsOnline\Bird\BirdServiceProvider;
 
-class TestCase extends Orchestra
+abstract class TestCase extends Orchestra
 {
-    protected function setUp(): void
+    protected function getPackageProviders($app): array
     {
-        parent::setUp();
+        return [BirdServiceProvider::class];
     }
 
-    protected function getPackageProviders($app)
+    protected function defineEnvironment($app): void
     {
-        return [
-            BirdServiceProvider::class,
-        ];
-    }
-
-    public function getEnvironmentSetUp($app)
-    {
-        config()->set('database.default', 'testing');
+        $app['config']->set('bird.access_key', 'test-access-key');
+        $app['config']->set('bird.workspace_id', 'ws-123');
+        $app['config']->set('bird.channels.sms', 'sms-channel');
+        $app['config']->set('bird.channels.whatsapp', 'wa-channel');
     }
 }
