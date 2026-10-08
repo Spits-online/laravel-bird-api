@@ -56,8 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/Spits-online/laravel-bird/compare/v2.0.0...HEAD
-[2.0.0]: https://github.com/Spits-online/laravel-bird/compare/V1.1.1...v2.0.0
+[Unreleased]: https://github.com/Spits-online/laravel-bird/compare/V2.0.0...HEAD
+[2.0.0]: https://github.com/Spits-online/laravel-bird/compare/V1.1.1...V2.0.0
 [1.1.1]: https://github.com/Spits-online/laravel-bird/compare/V1.1.0...V1.1.1
 [1.1.0]: https://github.com/Spits-online/laravel-bird/compare/V1.0.0...V1.1.0
 [1.0.0]: https://github.com/Spits-online/laravel-bird/releases/tag/V1.0.0
