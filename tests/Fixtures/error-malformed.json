@@ -1,0 +1,5 @@
+{
+  "code": "MalformedRequest",
+  "message": "One or more fields provided in the request body are malformed",
+  "details": { ".name": ["Property 'name' is missing"] }
+}
