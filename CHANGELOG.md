@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0.0] - 2026-10-08
 
-A rewrite. See [UPGRADE.md](UPGRADE.md) for the step-by-step upgrade.
-
 ### Added
 - `Bird::fake()` with `assertSent()`, `assertNotSent()` and `assertNothingSent()` for testing apps.
 - `Bird::send()` to send a message without a notification, returning a `SentMessage` with Bird's message id.
