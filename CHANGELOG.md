@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Version 2.0.0, a rewrite. See [UPGRADE.md](UPGRADE.md) for the step-by-step upgrade.
+## [2.0.0] - 2026-10-08
+
+A rewrite. See [UPGRADE.md](UPGRADE.md) for the step-by-step upgrade.
 
 ### Added
 - `Bird::fake()` with `assertSent()`, `assertNotSent()` and `assertNothingSent()` for testing apps.
@@ -16,6 +18,7 @@ Version 2.0.0, a rewrite. See [UPGRADE.md](UPGRADE.md) for the step-by-step upgr
 - `Template::named()` to build a template from `config('bird.templates')`.
 - WhatsApp template parameters (`['name' => 'Jane']`), Bird's current replacement for `variables`.
 - Recipients can be phone numbers or email addresses, and a message can have several.
+- Exceptions that say what went wrong: `RequestFailed` (with Bird's `$status`, `$errorCode` and `$body`), `ConnectionFailed`, `MissingConfiguration` (names the env key to set) and `InvalidRecipient`, all extending `BirdException`.
 - An app's `config/bird.php` only needs the keys it changes. It is merged over the defaults key by key instead of one level deep.
 
 ### Changed
@@ -38,6 +41,11 @@ Version 2.0.0, a rewrite. See [UPGRADE.md](UPGRADE.md) for the step-by-step upgr
 - `ContactService::delete()` crashed on connection errors and returned an array from a `bool` method.
 - Connection errors in `show()` and `createOrUpdate()` were logged and swallowed, returning `[]`.
 
+## [1.1.1] - 2026-04-21
+
+### Added
+- Laravel 13 support.
+
 ## [1.1.0] - 2025-08-25
 
 ### Added
@@ -50,6 +58,8 @@ Version 2.0.0, a rewrite. See [UPGRADE.md](UPGRADE.md) for the step-by-step upgr
 
 - Initial release.
 
-[Unreleased]: https://github.com/Spits-online/laravel-bird-api/compare/V1.1.1...HEAD
+[Unreleased]: https://github.com/Spits-online/laravel-bird-api/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/Spits-online/laravel-bird-api/compare/V1.1.1...v2.0.0
+[1.1.1]: https://github.com/Spits-online/laravel-bird-api/compare/V1.1.0...V1.1.1
 [1.1.0]: https://github.com/Spits-online/laravel-bird-api/compare/V1.0.0...V1.1.0
 [1.0.0]: https://github.com/Spits-online/laravel-bird-api/releases/tag/V1.0.0
