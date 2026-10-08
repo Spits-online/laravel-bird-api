@@ -69,7 +69,10 @@ That's all the configuration most apps need, so you don't have to publish a conf
 // config/bird.php
 return [
     'templates' => [
-        'order_shipped' => ['project_id' => env('BIRD_ORDER_SHIPPED_TEMPLATE'), 'locale' => 'nl'],
+        'order_shipped' => [
+            'project_id' => env('BIRD_ORDER_SHIPPED_TEMPLATE'),
+            'locale' => 'nl',
+        ],
     ],
 ];
 ```
@@ -94,11 +97,13 @@ class User extends Authenticatable
 }
 ```
 
-To send to someone else, set the recipient on the message (`->to('+31612345678')`), or send an on-demand notification:
+To send to someone else, set the recipient on the message (`->to('+31612345678')`), or send an [on-demand notification](https://laravel.com/docs/notifications#on-demand-notifications):
 
 ```php
 Notification::route('bird', '+31612345678')->notify(new OrderShipped);
 ```
+
+`bird` is the route name both Bird channels read, like `mail` for the mail channel. A phone number is the same for SMS and WhatsApp, so you set it once, and the notification's `via()` still decides which channels send.
 
 ### SMS
 
@@ -121,9 +126,11 @@ public function via(object $notifiable): array
 public function toBirdWhatsApp(object $notifiable): WhatsAppMessage
 {
     return WhatsAppMessage::template(
-        new Template(projectId: 'your-project-id', locale: 'nl', parameters: [
-            'name' => $notifiable->first_name,
-        ]),
+        Template::create(
+            projectId: 'your-project-id',
+            parameters: ['name' => $notifiable->first_name],
+            locale: 'nl',
+        ),
     );
 }
 ```
@@ -144,7 +151,8 @@ return [
         ],
         'appointment_reminder' => [
             'project_id' => env('BIRD_APPOINTMENT_REMINDER_TEMPLATE'),
-            'version' => 'a1b2c3d4-…', // pin a version instead of using the latest
+            // Pin a version instead of using the latest
+            'version' => 'a1b2c3d4-…',
             'locale' => 'en',
         ],
     ],
@@ -154,13 +162,18 @@ return [
 Then use them by name:
 
 ```php
-return WhatsAppMessage::template(Template::named('order_shipped', ['name' => $notifiable->first_name]));
+return WhatsAppMessage::template(
+    Template::named('order_shipped', ['name' => $notifiable->first_name]),
+);
 ```
 
 Inside WhatsApp's 24-hour service window you can also send any other [message body Bird supports](https://docs.bird.com/api/channels-api/supported-channels/programmable-whatsapp/sending-whatsapp-messages):
 
 ```php
-WhatsAppMessage::body(['type' => 'text', 'text' => ['text' => 'Thanks, we received your reply.']]);
+WhatsAppMessage::body([
+    'type' => 'text',
+    'text' => ['text' => 'Thanks, we received your reply.'],
+]);
 ```
 
 ### SMS and WhatsApp together
@@ -180,7 +193,9 @@ public function toBirdSms(object $notifiable): SmsMessage
 
 public function toBirdWhatsApp(object $notifiable): WhatsAppMessage
 {
-    return WhatsAppMessage::template(Template::named('order_shipped', ['name' => $notifiable->first_name]));
+    return WhatsAppMessage::template(
+        Template::named('order_shipped', ['name' => $notifiable->first_name]),
+    );
 }
 ```
 
@@ -190,7 +205,9 @@ public function toBirdWhatsApp(object $notifiable): WhatsAppMessage
 use SpitsOnline\Bird\Facades\Bird;
 use SpitsOnline\Bird\Messages\SmsMessage;
 
-$sent = Bird::send(SmsMessage::create('Your code is 123456')->to('+31612345678'));
+$sent = Bird::send(
+    SmsMessage::create('Your code is 123456')->to('+31612345678'),
+);
 
 $sent->id;     // Bird's message id
 $sent->status; // "accepted"
@@ -203,8 +220,11 @@ Pass a `channelId` to send through a channel other than the configured one: `Bir
 ```php
 use SpitsOnline\Bird\Facades\Bird;
 
-// Create the contact, or update it if one with this phone number or email exists
-$contact = Bird::contacts()->upsert('+31612345678', ['firstName' => 'Jane', 'lastName' => 'Doe']);
+// Creates the contact, or updates the one with this phone or email
+$contact = Bird::contacts()->upsert('+31612345678', [
+    'firstName' => 'Jane',
+    'lastName' => 'Doe',
+]);
 
 $contact = Bird::contacts()->find($contactId);
 $contact->displayName;  // "Jane Doe"
@@ -224,7 +244,10 @@ foreach ($page->contacts as $contact) {
     // ...
 }
 
-$next = Bird::contacts()->list(limit: 100, pageToken: $page->nextPageToken); // null on the last page
+$next = Bird::contacts()->list(
+    limit: 100,
+    pageToken: $page->nextPageToken, // null on the last page
+);
 ```
 
 ## Error handling
@@ -267,7 +290,9 @@ Bird::fake();
 
 $user->notify(new OrderShipped);
 
-Bird::assertSent(fn (Message $message) => $message->recipients()[0]->value === $user->phone_number);
+Bird::assertSent(function (Message $message) use ($user) {
+    return $message->recipients()[0]->value === $user->phone_number;
+});
 Bird::assertNotSent(fn (Message $message) => /* ... */);
 Bird::assertNothingSent();
 ```
@@ -294,7 +319,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [Spits](https://spits.online)
+- [SpitsOnline](https://spits.online)
 - [All Contributors](../../contributors)
 
 ## License
