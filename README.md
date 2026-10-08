@@ -6,7 +6,7 @@
     </picture>
   </a>
 
-<h1>Send SMS and WhatsApp notifications and manage contacts with Bird from Laravel</h1>
+<h1>Bird SMS and WhatsApp for Laravel</h1>
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spits-online/laravel-bird-api.svg?style=flat-square)](https://packagist.org/packages/spits-online/laravel-bird-api)
 [![Tests](https://img.shields.io/github/actions/workflow/status/Spits-online/laravel-bird-api/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/Spits-online/laravel-bird-api/actions/workflows/run-tests.yml)

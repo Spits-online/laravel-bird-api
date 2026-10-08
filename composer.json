@@ -1,6 +1,6 @@
 {
     "name": "spits-online/laravel-bird-api",
-    "description": "Send SMS and WhatsApp notifications and manage contacts with Bird from Laravel",
+    "description": "Bird SMS and WhatsApp for Laravel",
     "keywords": [
         "spits",
         "laravel",
