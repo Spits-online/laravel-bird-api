@@ -7,7 +7,7 @@ Version 2 is a rewrite. Most changes are renames you can do with search and repl
 ### Checklist
 
 - [ ] You're on PHP 8.3+ and Laravel 12 or 13
-- [ ] `composer require spits-online/laravel-bird-api:^2.0`
+- [ ] Switch to the new package name: `composer remove spits-online/laravel-bird-api`, then `composer require spits-online/laravel-bird:^2.0`
 - [ ] Replace `Spits\Bird\` with `SpitsOnline\Bird\` across your app
 - [ ] Rename the classes and methods below
 - [ ] If you published `config/bird.php`, shrink it to the keys you actually change. The rest now comes from the package, merged key by key

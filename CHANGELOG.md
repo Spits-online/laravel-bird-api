@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `laravel-bird-api` will be documented in this file.
+All notable changes to `laravel-bird` will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -56,8 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/Spits-online/laravel-bird-api/compare/v2.0.0...HEAD
-[2.0.0]: https://github.com/Spits-online/laravel-bird-api/compare/V1.1.1...v2.0.0
-[1.1.1]: https://github.com/Spits-online/laravel-bird-api/compare/V1.1.0...V1.1.1
-[1.1.0]: https://github.com/Spits-online/laravel-bird-api/compare/V1.0.0...V1.1.0
-[1.0.0]: https://github.com/Spits-online/laravel-bird-api/releases/tag/V1.0.0
+[Unreleased]: https://github.com/Spits-online/laravel-bird/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/Spits-online/laravel-bird/compare/V1.1.1...v2.0.0
+[1.1.1]: https://github.com/Spits-online/laravel-bird/compare/V1.1.0...V1.1.1
+[1.1.0]: https://github.com/Spits-online/laravel-bird/compare/V1.0.0...V1.1.0
+[1.0.0]: https://github.com/Spits-online/laravel-bird/releases/tag/V1.0.0

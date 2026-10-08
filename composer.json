@@ -1,5 +1,5 @@
 {
-    "name": "spits-online/laravel-bird-api",
+    "name": "spits-online/laravel-bird",
     "description": "Bird SMS and WhatsApp for Laravel",
     "keywords": [
         "spits",
@@ -10,7 +10,7 @@
         "whatsapp",
         "notifications"
     ],
-    "homepage": "https://github.com/Spits-online/laravel-bird-api",
+    "homepage": "https://github.com/Spits-online/laravel-bird",
     "license": "MIT",
     "authors": [
         {
@@ -20,8 +20,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/Spits-online/laravel-bird-api/issues",
-        "source": "https://github.com/Spits-online/laravel-bird-api"
+        "issues": "https://github.com/Spits-online/laravel-bird/issues",
+        "source": "https://github.com/Spits-online/laravel-bird"
     },
     "require": {
         "php": "^8.3",

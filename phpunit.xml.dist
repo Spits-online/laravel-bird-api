@@ -16,7 +16,7 @@
          backupStaticProperties="false"
 >
     <testsuites>
-        <testsuite name="Laravel Bird API">
+        <testsuite name="Laravel Bird">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

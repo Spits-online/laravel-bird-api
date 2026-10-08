@@ -1,17 +1,17 @@
 <div align="left">
-  <a href="https://github.com/Spits-online/laravel-bird-api">
+  <a href="https://github.com/Spits-online/laravel-bird">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Spits-online/laravel-bird-api/main/art/banner-dark.png">
-      <img alt="Laravel Bird API by Spits" src="https://raw.githubusercontent.com/Spits-online/laravel-bird-api/main/art/banner-light.png">
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Spits-online/laravel-bird/main/art/banner-dark.png">
+      <img alt="Laravel Bird by Spits" src="https://raw.githubusercontent.com/Spits-online/laravel-bird/main/art/banner-light.png">
     </picture>
   </a>
 
 <h1>Bird SMS and WhatsApp for Laravel</h1>
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/spits-online/laravel-bird-api.svg?style=flat-square)](https://packagist.org/packages/spits-online/laravel-bird-api)
-[![Tests](https://img.shields.io/github/actions/workflow/status/Spits-online/laravel-bird-api/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/Spits-online/laravel-bird-api/actions/workflows/run-tests.yml)
-[![PHPStan](https://img.shields.io/github/actions/workflow/status/Spits-online/laravel-bird-api/phpstan.yml?branch=main&label=phpstan&style=flat-square)](https://github.com/Spits-online/laravel-bird-api/actions/workflows/phpstan.yml)
-[![Total Downloads](https://img.shields.io/packagist/dt/spits-online/laravel-bird-api.svg?style=flat-square)](https://packagist.org/packages/spits-online/laravel-bird-api)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/spits-online/laravel-bird.svg?style=flat-square)](https://packagist.org/packages/spits-online/laravel-bird)
+[![Tests](https://img.shields.io/github/actions/workflow/status/Spits-online/laravel-bird/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/Spits-online/laravel-bird/actions/workflows/run-tests.yml)
+[![PHPStan](https://img.shields.io/github/actions/workflow/status/Spits-online/laravel-bird/phpstan.yml?branch=main&label=phpstan&style=flat-square)](https://github.com/Spits-online/laravel-bird/actions/workflows/phpstan.yml)
+[![Total Downloads](https://img.shields.io/packagist/dt/spits-online/laravel-bird.svg?style=flat-square)](https://packagist.org/packages/spits-online/laravel-bird)
 
 </div>
 
@@ -45,7 +45,7 @@ class OrderShipped extends Notification
 ## Installation
 
 ```bash
-composer require spits-online/laravel-bird-api
+composer require spits-online/laravel-bird
 ```
 
 Add your credentials to `.env`. Only the channels you use need an id.
