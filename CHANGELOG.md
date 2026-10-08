@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Bird::fake()` with `assertSent()`, `assertNotSent()` and `assertNothingSent()` for testing apps.
 - `Bird::send()` to send a message without a notification, returning a `SentMessage` with Bird's message id.
 - Typed `Contact` and `ContactPage` objects for contact responses.
-- `Template::named()` to build a template from `config('bird.templates')`.
+- `Template::create()` to build a template, and `Template::named()` to build one from `config('bird.templates')`.
 - WhatsApp template parameters (`['name' => 'Jane']`), Bird's current replacement for `variables`.
 - Recipients can be phone numbers or email addresses, and a message can have several.
 - Exceptions that say what went wrong: `RequestFailed` (with Bird's `$status`, `$errorCode` and `$body`), `ConnectionFailed`, `MissingConfiguration` (names the env key to set) and `InvalidRecipient`, all extending `BirdException`.
