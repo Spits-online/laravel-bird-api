@@ -2,26 +2,22 @@ name: Fix PHP code style issues
 
 on:
   push:
-    paths:
-      - '**.php'
+    paths: ['**.php', 'pint.json']
 
 permissions:
   contents: write
 
 jobs:
-  php-code-styling:
+  pint:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 5
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Fix PHP code style issues
-        uses: aglipanci/laravel-pint-action@latest
+      - uses: aglipanci/laravel-pint-action@v2
 
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v7
+      - uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          commit_message: "style: fix code style"
+          commit_message: 'style: fix code style'
