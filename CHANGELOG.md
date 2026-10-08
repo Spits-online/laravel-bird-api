@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-10-08
+
+### Fixed
+- The `[Unreleased]` and `[2.0.0]` links at the bottom of the changelog pointed at a `v2.0.0` tag that doesn't exist. They now use `V2.0.0`.
+
 ## [2.0.0] - 2026-10-08
 
 ### Added
@@ -56,7 +61,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/Spits-online/laravel-bird/compare/V2.0.0...HEAD
+[Unreleased]: https://github.com/Spits-online/laravel-bird/compare/V2.0.1...HEAD
+[2.0.1]: https://github.com/Spits-online/laravel-bird/compare/V2.0.0...V2.0.1
 [2.0.0]: https://github.com/Spits-online/laravel-bird/compare/V1.1.1...V2.0.0
 [1.1.1]: https://github.com/Spits-online/laravel-bird/compare/V1.1.0...V1.1.1
 [1.1.0]: https://github.com/Spits-online/laravel-bird/compare/V1.0.0...V1.1.0
