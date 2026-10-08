@@ -9,7 +9,7 @@ permissions:
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'Spits-online/laravel-bird-api'
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'Spits-online/laravel-bird'
     steps:
       - id: metadata
         uses: dependabot/fetch-metadata@v3

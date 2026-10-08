@@ -44,7 +44,7 @@ return [
     | ids. Each entry takes a `project_id`, and optionally a `version`
     | (default `latest`) and `locale`. Empty here: templates belong to the app.
     |
-    | See https://github.com/Spits-online/laravel-bird-api#naming-templates
+    | See https://github.com/Spits-online/laravel-bird#naming-templates
     |
     */
 

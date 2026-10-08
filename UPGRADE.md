@@ -2,12 +2,12 @@
 
 ## From 1.x to 2.0
 
-Version 2 is a rewrite. Most changes are renames you can do with search and replace.
+Version 2 is a rewrite. Most changes are renames you can do with search and replace. Version 1 is no longer supported and won't get bug or security fixes.
 
 ### Checklist
 
 - [ ] You're on PHP 8.3+ and Laravel 12 or 13
-- [ ] `composer require spits-online/laravel-bird-api:^2.0`
+- [ ] Switch to the new package name: `composer remove spits-online/laravel-bird-api`, then `composer require spits-online/laravel-bird:^2.0`
 - [ ] Replace `Spits\Bird\` with `SpitsOnline\Bird\` across your app
 - [ ] Rename the classes and methods below
 - [ ] If you published `config/bird.php`, shrink it to the keys you actually change. The rest now comes from the package, merged key by key
@@ -88,7 +88,9 @@ After:
 public function toBirdWhatsApp(object $notifiable): WhatsAppMessage
 {
     return WhatsAppMessage::template(
-        Template::named('foo_template', ['receiverFirstName' => $notifiable->first_name]),
+        Template::named('foo_template', [
+            'receiverFirstName' => $notifiable->first_name,
+        ]),
     );
 }
 ```
@@ -97,7 +99,10 @@ The config entry loses its `whatsapp` level and the `template_` prefixes:
 
 ```php
 'templates' => [
-    'foo_template' => ['project_id' => '…', 'version' => 'latest', 'locale' => 'nl'],
+    'foo_template' => [
+        'project_id' => '…',
+        'locale' => 'nl',
+    ],
 ],
 ```
 

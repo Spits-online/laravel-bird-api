@@ -72,6 +72,15 @@ it('builds a template from config', function () {
     ]);
 });
 
+it('creates a template with named arguments', function () {
+    expect(Template::create('proj', ['name' => 'Jane'], locale: 'nl')->toArray())->toBe([
+        'projectId' => 'proj',
+        'version' => 'latest',
+        'locale' => 'nl',
+        'parameters' => [['type' => 'string', 'key' => 'name', 'value' => 'Jane']],
+    ]);
+});
+
 it('explains a missing template', function () {
     Template::named('nope');
 })->throws(MissingConfiguration::class, 'bird.templates.nope.project_id');

@@ -22,6 +22,14 @@ final readonly class Template
     ) {}
 
     /**
+     * @param  array<string, mixed>  $parameters  the template's variables, e.g. `['name' => 'Jane']`
+     */
+    public static function create(string $projectId, array $parameters = [], ?string $locale = null, string $version = 'latest'): self
+    {
+        return new self($projectId, $version, $locale, $parameters);
+    }
+
+    /**
      * A template from `config('bird.templates.{name}')`.
      *
      * @param  array<string, mixed>  $parameters
