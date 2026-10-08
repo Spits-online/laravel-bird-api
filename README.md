@@ -125,7 +125,7 @@ To send to someone else, set the recipient on the message (`->to('+31612345678')
 Notification::route('bird', '+31612345678')->notify(new OrderShipped);
 ```
 
-`to()` takes several recipients at once. A value with an `@` is sent as an email address, anything else as a phone number. You can also pass an `Identifier`:
+`to()` takes several recipients at once. A value with an `@` is sent as an email address, anything else as a phone number, the way `Identifier::from()` reads it. You can also pass an `Identifier`:
 
 ```php
 use SpitsOnline\Bird\Data\Identifier;
@@ -347,6 +347,7 @@ A message tells you who it goes to and what Bird would receive:
 ```php
 use SpitsOnline\Bird\Enums\IdentifierKey;
 
+$message->channel();          // "sms" or "whatsapp", its key in `bird.channels`
 $message->recipients();       // list<Identifier>
 $message->recipients()[0]->key === IdentifierKey::PHONE_NUMBER;
 $message->hasRecipients();    // false until a recipient is set
