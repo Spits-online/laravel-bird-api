@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- `IdentifierKey` cases are written in upper case, following the Spits convention: `IdentifierKey::PHONE_NUMBER` and `IdentifierKey::EMAIL_ADDRESS` instead of `PhoneNumber` and `EmailAddress`. Their values are unchanged.
+
 ## [2.0.1] - 2026-10-08
 
 ### Fixed
