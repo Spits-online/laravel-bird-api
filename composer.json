@@ -1,64 +1,69 @@
 {
     "name": "spits-online/laravel-bird-api",
-    "description": "This package allows you to connect to Bird's API using Laravel",
+    "description": "Send SMS and WhatsApp notifications and manage contacts with Bird from Laravel",
     "keywords": [
         "spits",
         "laravel",
-        "bird"
+        "bird",
+        "messagebird",
+        "sms",
+        "whatsapp",
+        "notifications"
     ],
     "homepage": "https://github.com/Spits-online/laravel-bird-api",
     "license": "MIT",
     "authors": [
         {
             "name": "Spits",
-            "email": "webapps@spits.online"
+            "email": "webapps@spits.online",
+            "homepage": "https://spits.online"
         }
     ],
+    "support": {
+        "issues": "https://github.com/Spits-online/laravel-bird-api/issues",
+        "source": "https://github.com/Spits-online/laravel-bird-api"
+    },
     "require": {
-        "php": "^8.1",
-        "guzzlehttp/promises": "^2.0",
-        "illuminate/contracts": "^10.0||^11.0||^12.0||^13.0",
-        "illuminate/http": "^10.0||^11.0||^12.0||^13.0",
-        "illuminate/notifications": "^10.0||^11.0||^12.0||^13.0",
-        "illuminate/support": "^10.0||^11.0||^12.0||^13.0",
+        "php": "^8.3",
+        "illuminate/contracts": "^12.0||^13.0",
+        "illuminate/http": "^12.0||^13.0",
+        "illuminate/notifications": "^12.0||^13.0",
+        "illuminate/support": "^12.0||^13.0",
         "spatie/laravel-package-tools": "^1.16"
     },
     "require-dev": {
-        "larastan/larastan": "^2.9||^3.0",
-        "laravel/pint": "^1.14",
-        "nunomaduro/collision": "^7.10.0||^8.9||^9.0",
-        "orchestra/testbench": "^8.22.0||^9.0.0||^10.8||^11.0",
-        "pestphp/pest": "^2.34||^3.0||^4.0",
-        "pestphp/pest-plugin-arch": "^2.7||^3.0||^4.0",
-        "pestphp/pest-plugin-laravel": "^2.3||^3.0||^4.0",
-        "phpstan/extension-installer": "^1.3",
-        "phpstan/phpstan-deprecation-rules": "^1.1||^2.0"
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.18",
+        "nunomaduro/collision": "^8.6",
+        "orchestra/testbench": "^10.0||^11.0",
+        "pestphp/pest": "^4.0||^5.0",
+        "pestphp/pest-plugin-arch": "^4.0||^5.0",
+        "pestphp/pest-plugin-laravel": "^4.0||^5.0",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan-deprecation-rules": "^2.0"
     },
     "autoload": {
         "psr-4": {
-            "Spits\\Bird\\": "src/"
+            "SpitsOnline\\Bird\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spits\\Bird\\Tests\\": "tests/"
+            "SpitsOnline\\Bird\\Tests\\": "tests/"
         }
     },
     "scripts": {
         "post-autoload-dump": "@composer run prepare",
-        "clear": "@php vendor/bin/testbench package:purge-bird --ansi",
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
-        "build": [
-            "@composer run prepare"
-        ],
-        "start": [
-            "Composer\\Config::disableProcessTimeout",
-            "@composer run build"
-        ],
         "analyse": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest --coverage",
-        "format": "vendor/bin/pint"
+        "format": "vendor/bin/pint",
+        "check": [
+            "vendor/bin/pint --test",
+            "@analyse",
+            "@test"
+        ]
     },
     "config": {
         "sort-packages": true,
@@ -70,8 +75,11 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Spits\\Bird\\BirdServiceProvider"
-            ]
+                "SpitsOnline\\Bird\\BirdServiceProvider"
+            ],
+            "aliases": {
+                "Bird": "SpitsOnline\\Bird\\Facades\\Bird"
+            }
         }
     },
     "minimum-stability": "stable",

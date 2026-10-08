@@ -1,65 +1,53 @@
 <?php
 
+declare(strict_types=1);
+
 return [
-    /*
-     * Access key for bird.com API.
-     * This key is required for authentication with bird.com services.
-     */
-    'access_key' => env('BIRD_ACCESS_KEY'),
 
     /*
-     * Workspace ID for bird.com.
-     * This ID identifies your workspace in bird.com.
-     */
+    |--------------------------------------------------------------------------
+    | Credentials
+    |--------------------------------------------------------------------------
+    |
+    | The access key (Bird → Settings → Access keys) and the workspace it
+    | belongs to (Bird → Settings → Workspace). Both are read from the
+    | environment, so they never end up in the repository.
+    |
+    */
+
+    'access_key' => env('BIRD_ACCESS_KEY'),
     'workspace_id' => env('BIRD_WORKSPACE_ID'),
 
     /*
-     * Channels configuration for bird.com notifications.
-     */
+    |--------------------------------------------------------------------------
+    | Channels
+    |--------------------------------------------------------------------------
+    |
+    | The Bird channel each message type is sent through (Bird → Channels →
+    | [channel] → Channel ID). Only the channels the app uses need a value;
+    | sending through an empty one throws and names the env key to set.
+    |
+    */
+
     'channels' => [
-        /*
-         * SMS channel ID for bird.com notifications.
-         * This channel ID is required for sending SMS notifications.
-         */
         'sms' => env('BIRD_SMS_CHANNEL_ID'),
-
-        /*
-         * WhatsApp channel ID for bird.com notifications.
-         * This channel ID is optional. Leave empty if WhatsApp notifications are not used.
-         */
         'whatsapp' => env('BIRD_WHATSAPP_CHANNEL_ID'),
-
-        /*
-         * Email channel ID for bird.com notifications.
-         * This channel ID is optional. Leave empty if email notifications are not used.
-         */
-        'email' => env('BIRD_EMAIL_CHANNEL_ID'),
     ],
 
     /*
-     * Templates for different notification types.
-     * These templates are optional and can be left empty if not used.
-     */
-    'templates' => [
-        /*
-         * SMS template ID for bird.com notifications.
-         * This template ID is optional. Leave empty if SMS templates are not used.
-         */
-        'sms' => [],
+    |--------------------------------------------------------------------------
+    | Templates
+    |--------------------------------------------------------------------------
+    |
+    | Named Bird Studio templates, so notifications can send
+    | `Template::named('order_shipped', [...])` instead of repeating project
+    | ids. Each entry takes a `project_id`, and optionally a `version`
+    | (default `latest`) and `locale`. Empty here: templates belong to the app.
+    |
+    | See https://github.com/Spits-online/laravel-bird-api#naming-templates
+    |
+    */
 
-        /*
-         * WhatsApp template ID for bird.com notifications.
-         * This template ID is optional. Leave empty if WhatsApp templates are not used.
-         */
-        'whatsapp' => [],
-    ],
+    'templates' => [],
 
-    /*
-     * Regular expression for validating phone numbers.
-     * This regex is used to validate phone numbers for SMS and WhatsApp notifications.
-     *
-     * Default is set to match numbers in the format + followed by 11 digits.
-     * To negate the number verification set this to `null`
-     */
-    'phone_number_regex' => env('BIRD_PHONE_NUMBER_REGEX', '/^\+\d{11}$/'),
 ];
