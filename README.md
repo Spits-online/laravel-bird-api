@@ -1,3 +1,9 @@
+<!--
+  Keep this README in sync with the code. Every change to the public API, config,
+  channels, exceptions or the fake updates this file in the same commit: every
+  feature has a working example here, and nothing is shown that doesn't exist.
+-->
+
 <div align="left">
   <a href="https://github.com/Spits-online/laravel-bird">
     <picture>
@@ -79,6 +85,22 @@ return [
 
 Don't copy keys at their default value. A copied default looks like a deliberate choice, and it stops following the package when the default changes. To see every option, you can publish the full file with `php artisan vendor:publish --tag="bird-config"`. Keep the keys you change and delete the rest.
 
+### Using another workspace
+
+The facade uses the workspace in your config. Build a client for another one with `fromConfig()`, which takes the same keys:
+
+```php
+use SpitsOnline\Bird\Bird;
+
+$bird = Bird::fromConfig([
+    'access_key' => 'other-key',
+    'workspace_id' => 'other-workspace',
+    'channels' => ['sms' => 'other-sms-channel'],
+]);
+
+$bird->send(SmsMessage::create('Hi!')->to('+31612345678'));
+```
+
 ## Sending notifications
 
 ### Choosing the recipient
@@ -101,6 +123,18 @@ To send to someone else, set the recipient on the message (`->to('+31612345678')
 
 ```php
 Notification::route('bird', '+31612345678')->notify(new OrderShipped);
+```
+
+`to()` takes several recipients at once. A value with an `@` is sent as an email address, anything else as a phone number. You can also pass an `Identifier`:
+
+```php
+use SpitsOnline\Bird\Data\Identifier;
+
+SmsMessage::create('Your order has shipped!')
+    ->to('+31612345678', '+31687654321');
+
+SmsMessage::create('Your order has shipped!')
+    ->to(Identifier::phone('+31612345678'));
 ```
 
 `bird` is the route name both Bird channels read, like `mail` for the mail channel. A phone number is the same for SMS and WhatsApp, so you set it once, and the notification's `via()` still decides which channels send.
@@ -211,6 +245,7 @@ $sent = Bird::send(
 
 $sent->id;     // Bird's message id
 $sent->status; // "accepted"
+$sent->raw;    // the full answer from Bird
 ```
 
 Pass a `channelId` to send through a channel other than the configured one: `Bird::send($message, channelId: '…')`.
@@ -218,6 +253,7 @@ Pass a `channelId` to send through a channel other than the configured one: `Bir
 ## Managing contacts
 
 ```php
+use SpitsOnline\Bird\Data\Identifier;
 use SpitsOnline\Bird\Facades\Bird;
 
 // Creates the contact, or updates the one with this phone or email
@@ -226,11 +262,16 @@ $contact = Bird::contacts()->upsert('+31612345678', [
     'lastName' => 'Doe',
 ]);
 
+// Or by email address
+$contact = Bird::contacts()->upsert(Identifier::email('jane@example.com'), ['firstName' => 'Jane']);
+
 $contact = Bird::contacts()->find($contactId);
+$contact->id;           // Bird's contact id
 $contact->displayName;  // "Jane Doe"
 $contact->phoneNumber;  // "+31612345678"
 $contact->emailAddress; // "jane@example.com" or null
 $contact->attributes;   // ['firstName' => 'Jane', ...]
+$contact->raw;          // the full answer from Bird
 
 Bird::contacts()->delete($contactId);
 ```
@@ -285,6 +326,7 @@ When a channel throws, Laravel fires its `NotificationFailed` event. For queued 
 ```php
 use SpitsOnline\Bird\Facades\Bird;
 use SpitsOnline\Bird\Messages\Message;
+use SpitsOnline\Bird\Messages\SmsMessage;
 
 Bird::fake();
 
@@ -295,6 +337,20 @@ Bird::assertSent(function (Message $message) use ($user) {
 });
 Bird::assertNotSent(fn (Message $message) => /* ... */);
 Bird::assertNothingSent();
+
+// The sent messages themselves, optionally filtered
+$messages = Bird::sent(fn (Message $message) => $message instanceof SmsMessage);
+```
+
+A message tells you who it goes to and what Bird would receive:
+
+```php
+use SpitsOnline\Bird\Enums\IdentifierKey;
+
+$message->recipients();       // list<Identifier>
+$message->recipients()[0]->key === IdentifierKey::PHONE_NUMBER;
+$message->hasRecipients();    // false until a recipient is set
+$message->toArray();          // the request body Bird gets
 ```
 
 Contact calls go through Laravel's HTTP client, so fake them with `Http::fake()`.
