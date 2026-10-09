@@ -1,5 +1,16 @@
 # Upgrade guide
 
+## From 2.0.x to 2.0.2
+
+The `IdentifierKey` enum cases are now upper case, following the Spits convention. Their values, and what is sent to Bird, are unchanged. Only code that names the cases needs a search and replace:
+
+| 2.0.0 and 2.0.1 | 2.0.2 |
+|---|---|
+| `IdentifierKey::PhoneNumber` | `IdentifierKey::PHONE_NUMBER` |
+| `IdentifierKey::EmailAddress` | `IdentifierKey::EMAIL_ADDRESS` |
+
+This is a patch rather than a major because 2.0 had no installs when it changed.
+
 ## From 1.x to 2.0
 
 Version 2 is a rewrite. Most changes are renames you can do with search and replace. Version 1 is no longer supported and won't get bug or security fixes.

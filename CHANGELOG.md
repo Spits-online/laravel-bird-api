@@ -7,8 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.2] - 2026-10-09
+
 ### Changed
-- `IdentifierKey` cases are written in upper case, following the Spits convention: `IdentifierKey::PHONE_NUMBER` and `IdentifierKey::EMAIL_ADDRESS` instead of `PhoneNumber` and `EmailAddress`. Their values are unchanged.
+- `IdentifierKey` cases are written in upper case, following the Spits convention: `IdentifierKey::PHONE_NUMBER` and `IdentifierKey::EMAIL_ADDRESS` instead of `PhoneNumber` and `EmailAddress`. Their values are unchanged. This is a patch because 2.0 had no installs yet; see [UPGRADE](UPGRADE.md#from-20x-to-202).
 
 ## [2.0.1] - 2026-10-08
 
@@ -64,7 +66,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release.
 
-[Unreleased]: https://github.com/Spits-online/laravel-bird/compare/V2.0.1...HEAD
+[Unreleased]: https://github.com/Spits-online/laravel-bird/compare/V2.0.2...HEAD
+[2.0.2]: https://github.com/Spits-online/laravel-bird/compare/V2.0.1...V2.0.2
 [2.0.1]: https://github.com/Spits-online/laravel-bird/compare/V2.0.0...V2.0.1
 [2.0.0]: https://github.com/Spits-online/laravel-bird/compare/V1.1.1...V2.0.0
 [1.1.1]: https://github.com/Spits-online/laravel-bird/compare/V1.1.0...V1.1.1
