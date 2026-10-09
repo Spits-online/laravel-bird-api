@@ -91,6 +91,7 @@ The facade uses the workspace in your config. Build a client for another one wit
 
 ```php
 use SpitsOnline\Bird\Bird;
+use SpitsOnline\Bird\Messages\SmsMessage;
 
 $bird = Bird::fromConfig([
     'access_key' => 'other-key',
@@ -100,6 +101,8 @@ $bird = Bird::fromConfig([
 
 $bird->send(SmsMessage::create('Hi!')->to('+31612345678'));
 ```
+
+`Bird::fake()` only replaces the client behind the facade. A client you build with `fromConfig()` still calls Bird, so fake its requests in your tests with `Http::fake()`.
 
 ## Sending notifications
 
