@@ -18,12 +18,12 @@ final readonly class Identifier
 
     public static function phone(string $phoneNumber): self
     {
-        return new self(IdentifierKey::PhoneNumber, $phoneNumber);
+        return new self(IdentifierKey::PHONE_NUMBER, $phoneNumber);
     }
 
     public static function email(string $emailAddress): self
     {
-        return new self(IdentifierKey::EmailAddress, $emailAddress);
+        return new self(IdentifierKey::EMAIL_ADDRESS, $emailAddress);
     }
 
     /**

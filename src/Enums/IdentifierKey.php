@@ -6,6 +6,6 @@ namespace SpitsOnline\Bird\Enums;
 
 enum IdentifierKey: string
 {
-    case PhoneNumber = 'phonenumber';
-    case EmailAddress = 'emailaddress';
+    case PHONE_NUMBER = 'phonenumber';
+    case EMAIL_ADDRESS = 'emailaddress';
 }

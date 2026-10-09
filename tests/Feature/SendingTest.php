@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
+use SpitsOnline\Bird\Bird as BirdClient;
 use SpitsOnline\Bird\Exceptions\MissingConfiguration;
 use SpitsOnline\Bird\Exceptions\RequestFailed;
 use SpitsOnline\Bird\Facades\Bird;
@@ -87,7 +88,7 @@ it('explains a missing template', function () {
 
 it('names the env key when a channel is not configured', function () {
     config()->set('bird.channels.sms', null);
-    app()->forgetInstance(SpitsOnline\Bird\Bird::class);
+    app()->forgetInstance(BirdClient::class);
     Bird::clearResolvedInstances();
 
     Bird::send(SmsMessage::create('Hi')->to('+31612345678'));
@@ -100,3 +101,19 @@ it('throws when Bird rejects the message', function () {
 
     Bird::send(SmsMessage::create('Hi')->to('+31612345678'));
 })->throws(RequestFailed::class, 'One or more fields provided in the request body are malformed');
+
+it('sends through another workspace with a client from fromConfig(), leaving the facade on the configured one', function () {
+    Http::fake(['api.bird.com/*' => Http::response(birdFixture('message-accepted'), 202)]);
+
+    $other = BirdClient::fromConfig([
+        'access_key' => 'other-key',
+        'workspace_id' => 'other-workspace',
+        'channels' => ['sms' => 'other-sms-channel'],
+    ]);
+    $other->send(SmsMessage::create('Hi!')->to('+31612345678'));
+    Bird::send(SmsMessage::create('Hi!')->to('+31612345678'));
+
+    Http::assertSent(fn (Request $request) => $request->url() === 'https://api.bird.com/workspaces/other-workspace/channels/other-sms-channel/messages'
+        && $request->header('Authorization') === ['AccessKey other-key']);
+    Http::assertSent(fn (Request $request) => $request->url() === MESSAGES.'/sms-channel/messages');
+});
