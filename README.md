@@ -188,13 +188,14 @@ return [
         ],
         'appointment_reminder' => [
             'project_id' => env('BIRD_APPOINTMENT_REMINDER_TEMPLATE'),
-            // Pin a version instead of using the latest
             'version' => 'a1b2c3d4-…',
             'locale' => 'en',
         ],
     ],
 ];
 ```
+
+`version` pins a template version instead of using the latest.
 
 Then use them by name:
 
@@ -255,17 +256,17 @@ Pass a `channelId` to send through a channel other than the configured one: `Bir
 
 ## Managing contacts
 
+`upsert()` creates the contact, or updates the one with this phone number or email address. Pass an `Identifier::email()` to match on the email address:
+
 ```php
 use SpitsOnline\Bird\Data\Identifier;
 use SpitsOnline\Bird\Facades\Bird;
 
-// Creates the contact, or updates the one with this phone or email
 $contact = Bird::contacts()->upsert('+31612345678', [
     'firstName' => 'Jane',
     'lastName' => 'Doe',
 ]);
 
-// Or by email address
 $contact = Bird::contacts()->upsert(Identifier::email('jane@example.com'), ['firstName' => 'Jane']);
 
 $contact = Bird::contacts()->find($contactId);
@@ -313,12 +314,14 @@ try {
     $contact = Bird::contacts()->find($contactId);
 } catch (RequestFailed $e) {
     if ($e->status === 404) {
-        // the contact doesn't exist
+        return null;
     }
 
     throw $e;
 }
 ```
+
+A `404` status means the contact doesn't exist.
 
 When a channel throws, Laravel fires its `NotificationFailed` event. For queued notifications, the job is retried as usual.
 
@@ -340,8 +343,11 @@ Bird::assertSent(function (Message $message) use ($user) {
 });
 Bird::assertNotSent(fn (Message $message) => /* ... */);
 Bird::assertNothingSent();
+```
 
-// The sent messages themselves, optionally filtered
+`Bird::sent()` returns the sent messages themselves, optionally filtered:
+
+```php
 $messages = Bird::sent(fn (Message $message) => $message instanceof SmsMessage);
 ```
 
